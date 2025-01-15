@@ -3,7 +3,6 @@ package lua
 import (
 	"fmt"
 	"math"
-	"reflect"
 
 	"lua/ast"
 )
@@ -1243,7 +1242,7 @@ func compileExpr(context *funcContext, reg int, expr ast.Expr, ec *expcontext) i
 		}
 		return sused
 	default:
-		panic(fmt.Sprintf("expr %v not implemented.", reflect.TypeOf(ex).Elem().Name()))
+		panic(fmt.Sprintf("expr %v not implemented.", ex))
 	}
 
 } // }}}

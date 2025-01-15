@@ -149,7 +149,7 @@ func strGsub(L *LState) int {
 	str := L.CheckString(1)
 	pat := L.CheckString(2)
 	L.CheckTypes(3, LTString, LTTable, LTFunction)
-	repl := L.CheckAny(3)
+	repl := L.Get(3)
 	limit := L.OptInt(4, -1)
 
 	mds, err := pm.Find(pat, unsafeFastStringToReadOnlyBytes(str), 0, limit)

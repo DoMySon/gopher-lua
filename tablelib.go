@@ -93,7 +93,7 @@ func tableInsert(L *LState) int {
 		tbl.Append(L.Get(2))
 		return 0
 	}
-	tbl.Insert(int(L.CheckInt(2)), L.CheckAny(3))
+	tbl.Insert(int(L.CheckInt(2)), L.Get(3))
 	return 0
 }
 

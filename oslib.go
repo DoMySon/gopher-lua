@@ -195,7 +195,7 @@ func osTime(L *LState) int {
 	if L.GetTop() == 0 {
 		L.Push(LNumber(time.Now().Unix()))
 	} else {
-		lv := L.CheckAny(1)
+		lv := L.Get(1)
 		if lv == LNil {
 			L.Push(LNumber(time.Now().Unix()))
 		} else {

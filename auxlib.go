@@ -9,14 +9,6 @@ import (
 )
 
 /* checkType {{{ */
-
-func (ls *LState) CheckAny(n int) LValue {
-	if n > ls.GetTop() {
-		ls.ArgError(n, "value expected")
-	}
-	return ls.Get(n)
-}
-
 func (ls *LState) CheckInt(n int) int {
 	v := ls.Get(n)
 	if intv, ok := v.(LNumber); ok {
@@ -435,29 +427,6 @@ func (ls *LState) PreloadModule(name string, loader LGFunction) {
 		ls.RaiseError("package.preload must be a table")
 	}
 	ls.SetField(preload, name, ls.NewFunction(loader))
-}
-
-// Checks whether the given index is an LChannel and returns this channel.
-func (ls *LState) CheckChannel(n int) chan LValue {
-	v := ls.Get(n)
-	if ch, ok := v.(LChannel); ok {
-		return (chan LValue)(ch)
-	}
-	ls.TypeError(n, LTChannel)
-	return nil
-}
-
-// If the given index is a LChannel, returns this channel. If this argument is absent or is nil, returns ch. Otherwise, raises an error.
-func (ls *LState) OptChannel(n int, ch chan LValue) chan LValue {
-	v := ls.Get(n)
-	if v == LNil {
-		return ch
-	}
-	if ch, ok := v.(LChannel); ok {
-		return (chan LValue)(ch)
-	}
-	ls.TypeError(n, LTChannel)
-	return nil
 }
 
 /* }}} */

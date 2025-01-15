@@ -924,7 +924,7 @@ func init() {
 							rg.resize(requiredSize)
 						}
 					}
-					rg.array[regi] = rg.alloc.LNumber2I(vali)
+					rg.array[regi] =  LNumber(int64(vali))
 					if regi >= rg.top {
 						rg.top = regi + 1
 					}
@@ -953,7 +953,7 @@ func init() {
 									rg.resize(requiredSize)
 								}
 							}
-							rg.array[regi] = rg.alloc.LNumber2I(vali)
+							rg.array[regi] = LNumber(int64(vali))
 							if regi >= rg.top {
 								rg.top = regi + 1
 							}
@@ -996,7 +996,7 @@ func init() {
 								rg.resize(requiredSize)
 							}
 						}
-						rg.array[regi] = rg.alloc.LNumber2I(vali)
+						rg.array[regi] = LNumber(int64(vali))
 						if regi >= rg.top {
 							rg.top = regi + 1
 						}
@@ -1815,7 +1815,7 @@ func init() {
 									rg.resize(requiredSize)
 								}
 							}
-							rg.array[regi] = rg.alloc.LNumber2I(vali)
+							rg.array[regi] =  LNumber(int64(vali))
 							if regi >= rg.top {
 								rg.top = regi + 1
 							}
@@ -1838,7 +1838,7 @@ func init() {
 										rg.resize(requiredSize)
 									}
 								}
-								rg.array[regi] = rg.alloc.LNumber2I(vali)
+								rg.array[regi] =  LNumber(int64(vali))
 								if regi >= rg.top {
 									rg.top = regi + 1
 								}
@@ -1910,7 +1910,7 @@ func init() {
 								rg.resize(requiredSize)
 							}
 						}
-						rg.array[regi] = rg.alloc.LNumber2I(vali)
+						rg.array[regi] =  LNumber(int64(vali))
 						if regi >= rg.top {
 							rg.top = regi + 1
 						}
@@ -2236,7 +2236,7 @@ func opArith(L *LState, inst uint32, baseframe *callFrame) int { //OP_ADD, OP_SU
 					rg.resize(requiredSize)
 				}
 			}
-			rg.array[regi] = rg.alloc.LNumber2I(vali)
+			rg.array[regi] =  LNumber(int64(vali))
 			if regi >= rg.top {
 				rg.top = regi + 1
 			}

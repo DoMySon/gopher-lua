@@ -15,7 +15,6 @@ func OpenBase(L *LState) int {
 	global := L.Get(GlobalsIndex).(*LTable)
 	L.SetGlobal("_G", global)
 	L.SetGlobal("_VERSION", LString(LuaVersion))
-	L.SetGlobal("_GOPHER_LUA_VERSION", LString(PackageName+" "+PackageVersion))
 	basemod := L.RegisterModule("_G", baseFuncs)
 	global.RawSetString("ipairs", L.NewClosure(baseIpairs, L.NewFunction(ipairsaux)))
 	global.RawSetString("pairs", L.NewClosure(basePairs, L.NewFunction(pairsaux)))
@@ -82,7 +81,7 @@ func baseDoFile(L *LState) int {
 }
 
 func baseError(L *LState) int {
-	obj := L.CheckAny(1)
+	obj := L.Get(1)
 	level := L.OptInt(2, 1)
 	L.Error(obj, level)
 	return 0
@@ -128,7 +127,7 @@ func baseGetFEnv(L *LState) int {
 }
 
 func baseGetMetatable(L *LState) int {
-	L.Push(L.GetMetatable(L.CheckAny(1)))
+	L.Push(L.GetMetatable(L.Get(1)))
 	return 1
 }
 
@@ -258,7 +257,7 @@ func basePairs(L *LState) int {
 }
 
 func basePCall(L *LState) int {
-	L.CheckAny(1)
+	L.Get(1)
 	v := L.Get(1)
 	if v.Type() != LTFunction && L.GetMetaField(v, "__call").Type() != LTFunction {
 		L.Push(LFalse)
@@ -298,7 +297,7 @@ func base_PrintRegs(L *LState) int {
 }
 
 func baseRawEqual(L *LState) int {
-	if L.CheckAny(1) == L.CheckAny(2) {
+	if L.Get(1) == L.Get(2) {
 		L.Push(LTrue)
 	} else {
 		L.Push(LFalse)
@@ -307,12 +306,12 @@ func baseRawEqual(L *LState) int {
 }
 
 func baseRawGet(L *LState) int {
-	L.Push(L.RawGet(L.CheckTable(1), L.CheckAny(2)))
+	L.Push(L.RawGet(L.CheckTable(1), L.Get(2)))
 	return 1
 }
 
 func baseRawSet(L *LState) int {
-	L.RawSet(L.CheckTable(1), L.CheckAny(2), L.CheckAny(3))
+	L.RawSet(L.CheckTable(1), L.Get(2), L.Get(3))
 	return 0
 }
 
@@ -405,7 +404,7 @@ func baseToNumber(L *LState) int {
 	base := L.OptInt(2, 10)
 	noBase := L.Get(2) == LNil
 
-	switch lv := L.CheckAny(1).(type) {
+	switch lv := L.Get(1).(type) {
 	case LNumber:
 		L.Push(lv)
 	case LString:
@@ -433,13 +432,13 @@ func baseToNumber(L *LState) int {
 }
 
 func baseToString(L *LState) int {
-	v1 := L.CheckAny(1)
+	v1 := L.Get(1)
 	L.Push(L.ToStringMeta(v1))
 	return 1
 }
 
 func baseType(L *LState) int {
-	L.Push(LString(L.CheckAny(1).Type().String()))
+	L.Push(LString(L.Get(1).Type().String()))
 	return 1
 }
 

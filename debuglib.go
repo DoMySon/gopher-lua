@@ -25,7 +25,7 @@ var debugFuncs = map[string]LGFunction{
 }
 
 func debugGetFEnv(L *LState) int {
-	L.Push(L.GetFEnv(L.CheckAny(1)))
+	L.Push(L.GetFEnv(L.Get(1)))
 	return 1
 }
 
@@ -89,7 +89,7 @@ func debugGetLocal(L *LState) int {
 }
 
 func debugGetMetatable(L *LState) int {
-	L.Push(L.GetMetatable(L.CheckAny(1)))
+	L.Push(L.GetMetatable(L.Get(1)))
 	return 1
 }
 
@@ -107,14 +107,14 @@ func debugGetUpvalue(L *LState) int {
 }
 
 func debugSetFEnv(L *LState) int {
-	L.SetFEnv(L.CheckAny(1), L.CheckAny(2))
+	L.SetFEnv(L.Get(1), L.Get(2))
 	return 0
 }
 
 func debugSetLocal(L *LState) int {
 	level := L.CheckInt(1)
 	idx := L.CheckInt(2)
-	value := L.CheckAny(3)
+	value := L.Get(3)
 	dbg, ok := L.GetStack(level)
 	if !ok {
 		L.ArgError(1, "level out of range")
@@ -140,7 +140,7 @@ func debugSetMetatable(L *LState) int {
 func debugSetUpvalue(L *LState) int {
 	fn := L.CheckFunction(1)
 	idx := L.CheckInt(2)
-	value := L.CheckAny(3)
+	value := L.Get(3)
 	name := L.SetUpvalue(fn, idx, value)
 	if len(name) > 0 {
 		L.Push(LString(name))

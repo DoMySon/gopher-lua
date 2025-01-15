@@ -239,18 +239,6 @@ func TestToUserData(t *testing.T) {
 	errorIfNotEqual(t, L.Get(3), L.ToUserData(3))
 }
 
-func TestToChannel(t *testing.T) {
-	L := NewState()
-	defer L.Close()
-	L.Push(LNumber(10))
-	L.Push(LString("99.9"))
-	var ch chan LValue
-	L.Push(LChannel(ch))
-	errorIfFalse(t, L.ToChannel(1) == nil, "index 1 must be nil")
-	errorIfFalse(t, L.ToChannel(2) == nil, "index 2 must be nil")
-	errorIfNotEqual(t, ch, L.ToChannel(3))
-}
-
 func TestObjLen(t *testing.T) {
 	L := NewState()
 	defer L.Close()
@@ -709,54 +697,4 @@ type registryTestHandler int
 
 func (registryTestHandler) registryOverflow() {
 	panic("registry overflow")
-}
-
-// test pushing and popping from the registry
-func BenchmarkRegistryPushPopAutoGrow(t *testing.B) {
-	al := newAllocator(32)
-	sz := 256 * 20
-	reg := newRegistry(registryTestHandler(0), sz/2, 64, sz, al)
-	value := LString("test")
-
-	t.ResetTimer()
-
-	for j := 0; j < t.N; j++ {
-		for i := 0; i < sz; i++ {
-			reg.Push(value)
-		}
-		for i := 0; i < sz; i++ {
-			reg.Pop()
-		}
-	}
-}
-
-func BenchmarkRegistryPushPopFixed(t *testing.B) {
-	al := newAllocator(32)
-	sz := 256 * 20
-	reg := newRegistry(registryTestHandler(0), sz, 0, sz, al)
-	value := LString("test")
-
-	t.ResetTimer()
-
-	for j := 0; j < t.N; j++ {
-		for i := 0; i < sz; i++ {
-			reg.Push(value)
-		}
-		for i := 0; i < sz; i++ {
-			reg.Pop()
-		}
-	}
-}
-
-func BenchmarkRegistrySetTop(t *testing.B) {
-	al := newAllocator(32)
-	sz := 256 * 20
-	reg := newRegistry(registryTestHandler(0), sz, 32, sz*2, al)
-
-	t.ResetTimer()
-
-	for j := 0; j < t.N; j++ {
-		reg.SetTop(sz)
-		reg.SetTop(0)
-	}
 }

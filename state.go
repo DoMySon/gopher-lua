@@ -371,12 +371,11 @@ type registry struct {
 	top     int
 	growBy  int
 	maxSize int
-	alloc   *allocator
 	handler registryHandler
 }
 
-func newRegistry(handler registryHandler, initialSize int, growBy int, maxSize int, alloc *allocator) *registry {
-	return &registry{make([]LValue, initialSize), 0, growBy, maxSize, alloc, handler}
+func newRegistry(handler registryHandler, initialSize int, growBy int, maxSize int) *registry {
+	return &registry{make([]LValue, initialSize), 0, growBy, maxSize,  handler}
 }
 
 func (rg *registry) checkSize(requiredSize int) { // +inline-start
@@ -622,7 +621,7 @@ func (rg *registry) SetNumber(regi int, vali LNumber) { // +inline-start
 			rg.resize(requiredSize)
 		}
 	}
-	rg.array[regi] = rg.alloc.LNumber2I(vali)
+	rg.array[regi] = LNumber(int64(vali))
 	if regi >= rg.top {
 		rg.top = regi + 1
 	}
@@ -662,7 +661,6 @@ func panicWithoutTraceback(L *LState) {
 }
 
 func newLState(options Options) *LState {
-	al := newAllocator(32)
 	ls := &LState{
 		G:       newGlobal(),
 		Parent:  nil,
@@ -671,7 +669,6 @@ func newLState(options Options) *LState {
 		Options: options,
 
 		stop:         0,
-		alloc:        al,
 		currentFrame: nil,
 		wrapped:      false,
 		uvcache:      nil,
@@ -684,7 +681,7 @@ func newLState(options Options) *LState {
 	} else {
 		ls.stack = newFixedCallFrameStack(options.CallStackSize)
 	}
-	ls.reg = newRegistry(ls, options.RegistrySize, options.RegistryGrowStep, options.RegistryMaxSize, al)
+	ls.reg = newRegistry(ls, options.RegistrySize, options.RegistryGrowStep, options.RegistryMaxSize)
 	ls.Env = ls.G.Global
 	return ls
 }
@@ -2274,14 +2271,6 @@ func (ls *LState) RemoveContext() context.Context {
 	ls.mainLoop = mainLoop
 	ls.ctx = nil
 	return oldctx
-}
-
-// Converts the Lua value at the given acceptable index to the chan LValue.
-func (ls *LState) ToChannel(n int) chan LValue {
-	if lv, ok := ls.Get(n).(LChannel); ok {
-		return (chan LValue)(lv)
-	}
-	return nil
 }
 
 // RemoveCallerFrame removes the stack frame above the current stack frame. This is useful in tail calls. It returns

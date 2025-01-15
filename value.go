@@ -17,10 +17,9 @@ const (
 	LTUserData
 	LTThread
 	LTTable
-	LTChannel
 )
 
-var lValueNames = [9]string{"nil", "boolean", "number", "string", "function", "userdata", "thread", "table", "channel"}
+var lValueNames = [9]string{"nil", "boolean", "number", "string", "function", "userdata", "thread", "table"}
 
 func (vt LValueType) String() string {
 	return lValueNames[int(vt)]
@@ -187,7 +186,6 @@ type LState struct {
 	stop         int32
 	reg          *registry
 	stack        callFrameStack
-	alloc        *allocator
 	currentFrame *callFrame
 	wrapped      bool
 	uvcache      *Upvalue
@@ -208,8 +206,3 @@ type LUserData struct {
 
 func (ud *LUserData) String() string   { return fmt.Sprintf("userdata: %p", ud) }
 func (ud *LUserData) Type() LValueType { return LTUserData }
-
-type LChannel chan LValue
-
-func (ch LChannel) String() string   { return fmt.Sprintf("channel: %p", ch) }
-func (ch LChannel) Type() LValueType { return LTChannel }
