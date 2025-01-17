@@ -2219,7 +2219,7 @@ func (ls *LState) Yield(values ...LValue) int {
 	return -1
 }
 
-func (ls *LState) XMoveTo(other *LState, n int) {
+func (ls *LState) XMoveTo(other *LState, n int) {  // copy current stack to specific thread stack
 	if ls == other {
 		return
 	}

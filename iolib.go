@@ -374,7 +374,7 @@ func fileReadAux(L *LState, file *lFile, idx int) int {
 					var buf []byte
 					buf, err = io.ReadAll(file.reader)
 					if err == io.EOF {
-						L.Push(emptyLString)
+						L.Push(EmptyLString)
 						goto normalreturn
 					}
 					if err != nil {

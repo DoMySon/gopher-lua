@@ -7,7 +7,7 @@ import (
 	"lua/pm"
 )
 
-const emptyLString LString = LString("")
+const EmptyLString LString = LString("")
 
 func OpenString(L *LState) int {
 	var mod *LTable
@@ -393,7 +393,7 @@ func strRep(L *LState) int {
 	str := L.CheckString(1)
 	n := L.CheckInt(2)
 	if n < 0 {
-		L.Push(emptyLString)
+		L.Push(EmptyLString)
 	} else {
 		L.Push(LString(strings.Repeat(str, n)))
 	}
@@ -417,7 +417,7 @@ func strSub(L *LState) int {
 	end := luaIndex2StringIndex(str, L.OptInt(3, -1), false)
 	l := len(str)
 	if start >= l || end < start {
-		L.Push(emptyLString)
+		L.Push(EmptyLString)
 	} else {
 		L.Push(LString(str[start:end]))
 	}
