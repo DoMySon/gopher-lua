@@ -316,7 +316,7 @@ func (tb *LTable) RawGetString(key string) LValue {
 	if tb.strdict == nil {
 		return LNil
 	}
-	if v, vok := tb.strdict[string(key)]; vok {
+	if v, vok := tb.strdict[key]; vok {
 		return v
 	}
 	return LNil
